@@ -27,15 +27,19 @@ SOURCES += \
     src/main.cpp \
     src/mainwindow.cpp \
     src/math_helpers.cpp \
-    src/reflectionaxis.cpp \
-    src/poincareview.cpp \
+    src/edge.cpp \
+    src/tile.cpp \
+    src/automaton.cpp \
+    src/pcviewmodel.cpp \
 
 
 HEADERS += \
     include/mainwindow.h \
     include/math_helpers.h \
-    include/reflectionaxis.h \
-    include/poincareview.h \
+    include/edge.h \
+    include/tile.h \
+    include/automaton.h \
+    include/pcviewmodel.h \
 
 OBJECTS_DIR += build
 MOC_DIR += build

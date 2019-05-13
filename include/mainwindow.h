@@ -1,12 +1,11 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include "include/pcviewmodel.h"
+
 #include <QMainWindow>
-#include <QPainter>
-#include <QRegion>
-#include <QPainterPath>
-#include <map>
-#include <vector>
+#include <QHBoxLayout>
+
 
 namespace Ui {
 class MainWindow;
@@ -20,6 +19,10 @@ public:
     ~MainWindow();
 
 private:
+    PoincareViewModel *model;
+    // CellularController *controller;
+
+    QHBoxLayout *hbox;
 };
 
 #endif // MAINWINDOW_H

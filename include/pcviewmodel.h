@@ -12,14 +12,14 @@
 #include <unordered_set>
 
 namespace Ui {
-class PoincareView;
+class PoincareViewModel;
 }
 
-class PoincareView : public QOpenGLWidget {
+class PoincareViewModel : public QOpenGLWidget {
 
 public:
-    explicit PoincareView(QWidget *parent);
-    virtual ~PoincareView();
+    explicit PoincareViewModel(QWidget *parent);
+    virtual ~PoincareViewModel();
 
 protected:
     u_int sideCount;
