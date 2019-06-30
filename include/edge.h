@@ -1,27 +1,27 @@
-#ifndef REFLECTIONAXIS_H
-#define REFLECTIONAXIS_H
+#ifndef EDGE_H
+#define EDGE_H
 
 #include <QWidget>
 #include <QPainter>
 #include <QPoint>
 #include <QVector>
 
-class ReflectionAxis {
+class Edge {
 
 public:
-    ReflectionAxis();
-    virtual ~ReflectionAxis();
+    Edge();
+    virtual ~Edge();
 
     virtual QPointF *reflectPoint(QPointF *aPoint);
     QVector<QPointF *> *reflectPoints(QVector<QPointF *> *aPoint);
     virtual void draw(QPainter *painter);
 };
 
-class LineAxis : public ReflectionAxis {
+class LineEdge : public Edge {
 
 public:
-    LineAxis(QPointF *A, QPointF *B);
-    virtual ~LineAxis();
+    LineEdge(QPointF *A, QPointF *B);
+    virtual ~LineEdge();
 
     virtual QPointF *reflectPoint(QPointF *aPoint);
     virtual void draw(QPainter *painter);
@@ -34,11 +34,11 @@ protected:
     float slope;
 };
 
-class ArcAxis : public ReflectionAxis {
+class ArcEdge : public Edge {
 
 public:
-    ArcAxis(QPointF *A, QPointF *B, QPointF *origin, int diskDiameter);
-    virtual ~ArcAxis();
+    ArcEdge(QPointF *A, QPointF *B, QPointF *origin, int diskDiameter);
+    virtual ~ArcEdge();
 
     virtual QPointF *reflectPoint(QPointF *aPoint);
     virtual void draw(QPainter *painter);
@@ -50,4 +50,4 @@ protected:
     float radius;
 };
 
-#endif
+#endif // EDGE_H

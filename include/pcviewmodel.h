@@ -1,44 +1,63 @@
 #ifndef POINCAREVIEW_H
 #define POINCAREVIEW_H
 
-#include <QWidget>
-#include <QPainter>
-#include <QOpenGLWidget>
-#include <QPainterPath>
-
-
 #include <string>
 #include <map>
 #include <unordered_set>
+
+#include <QPainter>
+#include <QPainterPath>
+#include <QPaintEvent>
+#include <QPointF>
+#include <QRegion>
+#include <QVector>
+#include <QWidget>
+
+#include "include/tile.h"
+
 
 namespace Ui {
 class PoincareViewModel;
 }
 
-class PoincareViewModel : public QOpenGLWidget {
+class PoincareViewModel : public QWidget {
 
 public:
     explicit PoincareViewModel(QWidget *parent);
     virtual ~PoincareViewModel();
 
 protected:
-    u_int sideCount;
-    u_int adjacentCount;
-    u_int drawnCount;
-    u_int renderLayers;
-    int diskDiameter;
-    std::map<float, std::unordered_set<float> > drawnTiles;
+    bool areHyperbolicDims(int p, int q);
+    int setAdjCount(int count);
+    int setSideCount(int count);
+    void setRenderDepth(int depth);
+    void toggleFillMode();
+    void updateTiles();
+    // void mousePressEvent();
 
+private:
+    bool fillMode;
+    bool tilesToUpdate;
+    int adjacentCount;
+    int diskDiameter;
+    int drawnCount;
+    int sideCount;
+    int renderDepth;
+
+    QVector<QPointF *> *centerVertices;
+    QPainterPath *diskPath;
+    QRegion *diskRegion;
     QPainter *painter;
     QPointF *origin;
-    QRegion *diskRegion;
-    QPainterPath *diskPath;
-    QVector<QPointF *> *centerVertices;
 
-    void genCenterVertices();
-    bool hasBeenDrawn(QPointF *aPoint);
-    void drawTile(QVector<QPointF *> *vertices, QPointF *center, int layers);    
+    std::map<float, std::unordered_set<float> > drawnTiles;
+    QVector<Tile *> *tiles;
+
+    void drawTiling();    
+    QVector<QPointF *> getCenterVertices();
+    Tile *hasBeenDrawn(QPointF *aPoint);
     void paintEvent(QPaintEvent *e);
+
 };
 
 #endif // POINCAREVIEW_H
