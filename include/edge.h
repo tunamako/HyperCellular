@@ -12,9 +12,11 @@ public:
     Edge();
     virtual ~Edge();
 
+    QVector<QPointF *> *reflectTile(QVector<QPointF *> *aPoint);
+
     virtual QPointF *reflectPoint(QPointF *aPoint);
-    QVector<QPointF *> *reflectPoints(QVector<QPointF *> *aPoint);
     virtual void draw(QPainter *painter);
+    virtual void getRegion(QPointF *polygonCenter, QPointF *origin, float radius);
 };
 
 class LineEdge : public Edge {
@@ -25,6 +27,7 @@ public:
 
     virtual QPointF *reflectPoint(QPointF *aPoint);
     virtual void draw(QPainter *painter);
+    virtual void getRegion(QPointF *polygonCenter, QPointF *origin, float radius);
 
 
 protected:
@@ -37,11 +40,12 @@ protected:
 class ArcEdge : public Edge {
 
 public:
-    ArcEdge(QPointF *A, QPointF *B, QPointF *origin, int diskDiameter);
+    ArcEdge(QPointF *A, QPointF *B, QPointF *origin, float diskDiameter);
     virtual ~ArcEdge();
 
     virtual QPointF *reflectPoint(QPointF *aPoint);
     virtual void draw(QPainter *painter);
+    virtual void getRegion(QPointF *polygonCenter, QPointF *origin, float radius);
 
 protected:
     QPointF *A;

@@ -10,22 +10,24 @@
 #include "include/math_helpers.h"
 
 
-ReflectionAxis::ReflectionAxis() {}
-ReflectionAxis::~ReflectionAxis() {}
-QPointF *ReflectionAxis::reflectPoint(QPointF *aPoint) {}
-void ReflectionAxis::draw(QPainter *painter) {}
+Edge::Edge() {}
+Edge::~Edge() {}
+QPointF *Edge::reflectPoint(QPointF *aPoint) {}
+QVector<QPointF *> *Edge::reflectTile(QVector<QPointF *> *aPoint) {}
+void Edge::draw(QPainter *painter) {}
+void Edge::getRegion(QPointF *polygonCenter, QPointF *origin, float radius) {}
 
 
-LineAxis::LineAxis(QPointF *A, QPointF *B) {
+LineEdge::LineEdge(QPointF *A, QPointF *B) {
     this->A = new QPointF(A->x(), A->y());
     this->B = new QPointF(B->x(), B->y());
 
     this->slope = (B->y() - A->y())/(B->x() - A->x());
     this->y_intercept = A->y() - (this->slope * A->x());
 }
-LineAxis::~LineAxis() {}
+LineEdge::~LineEdge() {}
 
-QPointF *LineAxis::reflectPoint(QPointF *aPoint) {
+QPointF *LineEdge::reflectPoint(QPointF *aPoint) {
     float denom = 1 + pow(A->x(), 2);
     float m = this->slope;
     float b = this->y_intercept;
@@ -38,12 +40,14 @@ QPointF *LineAxis::reflectPoint(QPointF *aPoint) {
     return new QPointF(invX, invY);
 }
 
-void LineAxis::draw(QPainter *painter) {
+void LineEdge::draw(QPainter *painter) {
     painter->drawLine(*A, *B);
 }
 
+void LineEdge::getRegion(QPointF *polygonCenter, QPointF *origin, float radius) {}
 
-ArcAxis::ArcAxis(QPointF *A, QPointF *B, QPointF *origin, int diskDiameter) {
+
+ArcEdge::ArcEdge(QPointF *A, QPointF *B, QPointF *origin, float diskDiameter) {
     this->A = new QPointF(A->x(), A->y());
     this->B = new QPointF(B->x(), B->y());
     QPointF *tempA = new QPointF(A->x(), A->y());
@@ -69,9 +73,9 @@ ArcAxis::ArcAxis(QPointF *A, QPointF *B, QPointF *origin, int diskDiameter) {
 
     this->radius = distance(this->center, C);
 }
-ArcAxis::~ArcAxis() {}
+ArcEdge::~ArcEdge() {}
 
-QPointF *ArcAxis::reflectPoint(QPointF *aPoint) {
+QPointF *ArcEdge::reflectPoint(QPointF *aPoint) {
     float x = aPoint->x();
     float y = aPoint->y();
     float x0 = center->x();
@@ -82,7 +86,7 @@ QPointF *ArcAxis::reflectPoint(QPointF *aPoint) {
     return new QPointF(invX, invY);
 }
 
-void ArcAxis::draw(QPainter *painter) {
+void ArcEdge::draw(QPainter *painter) {
     // rectangle inscribed by aCircle
     QRectF rect(center->x() - radius, center->y() - radius, radius * 2, radius * 2);
     QLineF lineA(*center, *A);
@@ -95,3 +99,5 @@ void ArcAxis::draw(QPainter *painter) {
     painter->drawArc(rect, 16 * lineA.angle(), 16 * sweepAngle);
     
 }
+
+void ArcEdge::getRegion(QPointF *polygonCenter, QPointF *origin, float radius) {}

@@ -31,3 +31,4 @@ PoincareViewModel::PoincareViewModel(QWidget *parent) :
 }
 PoincareViewModel::~PoincareViewModel(){}
 
+void PoincareViewModel::paintEvent(QPaintEvent *e) {}
