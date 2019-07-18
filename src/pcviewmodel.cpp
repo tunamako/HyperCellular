@@ -20,6 +20,8 @@
 PoincareViewModel::PoincareViewModel(QWidget *parent) :
     QWidget(parent) {
 
+    this->parent = parent;
+
     this->centerVertices = new QVector<QPointF *>();
     this->origin = new QPointF();
 

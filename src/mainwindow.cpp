@@ -9,11 +9,11 @@
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent) {
         this->model = new PoincareViewModel(this);
-        // this->controller = new CellularController(this);
+        this->controller = new CellularController(this, this->model);
 
         this->hbox = new QHBoxLayout();
         this->hbox->addWidget(this->model);
-        // this->hbox->addWidget(this->controller);
+        this->hbox->addWidget(this->controller);
 
         this->hbox->setContentsMargins(0, 0, 0, 0);
         this->hbox->setStretch(0, 1);

@@ -31,6 +31,7 @@ SOURCES += \
     src/tile.cpp \
     src/automaton.cpp \
     src/pcviewmodel.cpp \
+    src/controller.cpp \
 
 
 HEADERS += \
@@ -40,6 +41,7 @@ HEADERS += \
     include/tile.h \
     include/automaton.h \
     include/pcviewmodel.h \
+    include/controller.h \
 
 OBJECTS_DIR += build
 MOC_DIR += build

@@ -2,6 +2,8 @@
 #define MAINWINDOW_H
 
 #include "include/pcviewmodel.h"
+#include "include/controller.h"
+
 
 #include <QMainWindow>
 #include <QHBoxLayout>
@@ -20,7 +22,7 @@ public:
 
 private:
     PoincareViewModel *model;
-    // CellularController *controller;
+    CellularController *controller;
 
     QHBoxLayout *hbox;
 };

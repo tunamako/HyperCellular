@@ -44,6 +44,7 @@ private:
     int sideCount;
     int renderDepth;
 
+    QWidget *parent;
     QVector<QPointF *> *centerVertices;
     QPainterPath *diskPath;
     QRegion *diskRegion;
