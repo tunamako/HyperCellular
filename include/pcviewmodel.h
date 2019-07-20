@@ -26,6 +26,7 @@ public:
     int adjacentCount;
     int sideCount;
     int renderDepth;
+    QVector<Tile *> *tiles;
 
     explicit PoincareViewModel(QWidget *parent);
     virtual ~PoincareViewModel();
@@ -34,11 +35,8 @@ public:
     int setAdjCount(int count);
     void setRenderDepth(int depth);
 
-protected:
-    bool areHyperbolicDims(int p, int q);
     void toggleFillMode();
     void updateTiles();
-    // void mousePressEvent();
 
 private:
     bool fillMode;
@@ -54,13 +52,13 @@ private:
     QPointF *origin;
 
     std::map<float, std::unordered_set<float> > drawnTiles;
-    QVector<Tile *> *tiles;
 
     void drawTiling();    
     QVector<QPointF *> getCenterVertices();
     Tile *hasBeenDrawn(QPointF *aPoint);
     void paintEvent(QPaintEvent *e);
-
+    bool areHyperbolicDims(int p, int q);
+    // void mousePressEvent();
 };
 
 #endif // POINCAREVIEW_H

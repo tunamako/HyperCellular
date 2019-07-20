@@ -1,4 +1,4 @@
-#include "controller.h"
+#include "include/controller.h"
 
 #include <math.h> 
 #include <algorithm>
@@ -19,9 +19,9 @@ CellularController::CellularController(QWidget *parent, PoincareViewModel *model
     QWidget(parent) {
 
     this->model = model;
-    //this->automaton = new WireWorld();
+    this->automaton = new WireWorld();
 
-    //this->resetTiles();
+    resetTiles();
     timer = new QTimer();
     connect(timer, SIGNAL(timeout()), this, SLOT(nextGeneration()));
     animSpeed = 100;
@@ -169,15 +169,15 @@ void CellularController::setRenderDepth(int depth) {
 }
 
 void CellularController::resetTiles() {
-    //automaton->fill(model->tiles);
-    //model->updateTiles();
+    automaton->fill(model->tiles);
+    model->updateTiles();
 }
 void CellularController::randomize() {
-    //automaton->randomize(model->tiles);
-    //model->updateTiles();
+    automaton->randomize(model->tiles);
+    model->updateTiles();
 }
 void CellularController::toggleFill() {
-    //model->toggleFillMode();    
+    model->toggleFillMode();    
 }
 
 void CellularController::clicked(QMouseEvent *e) {}

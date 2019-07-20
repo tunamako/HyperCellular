@@ -1,6 +1,5 @@
-#include "pcviewmodel.h"
-#include "edge.h"
-#include "math_helpers.h"
+#include "include/pcviewmodel.h"
+#include "include/math_helpers.h"
 
 #include <QWidget>
 #include <QPainter>
@@ -40,9 +39,9 @@ bool PoincareViewModel::areHyperbolicDims(int p, int q) {
 }
 
 int PoincareViewModel::setSideCount(int count) {
-	if (areHyperbolicDims(count, this->adjacentCount)) {
-		this->sideCount = count;
-		this->update();
+	if (areHyperbolicDims(count, adjacentCount)) {
+		sideCount = count;
+		update();
 		return 0;
 	} else {
 		return -1;
@@ -50,9 +49,9 @@ int PoincareViewModel::setSideCount(int count) {
 }
 
 int PoincareViewModel::setAdjCount(int count) {
-	if (areHyperbolicDims(this->sideCount, count)) {
-		this->adjacentCount = count;
-		this->update();
+	if (areHyperbolicDims(sideCount, count)) {
+		adjacentCount = count;
+		update();
 		return 0;
 	} else {
 		return -1;
@@ -60,7 +59,15 @@ int PoincareViewModel::setAdjCount(int count) {
 }
 
 void PoincareViewModel::setRenderDepth(int depth) {
-	this->renderDepth = depth;
-	this->update();
+	renderDepth = depth;
+	update();
 }
 
+void PoincareViewModel::updateTiles() {
+	tilesToUpdate = true;
+	update();
+
+}
+
+void PoincareViewModel::toggleFillMode() {
+}

@@ -1,7 +1,8 @@
 #ifndef CELLULARCONTROLLER_H
 #define CELLULARCONTROLLER_H
 
-#include "pcviewmodel.h"
+#include "include/pcviewmodel.h"
+#include "include/automaton.h"
 
 #include <QMouseEvent>
 #include <QSpinBox>
@@ -40,7 +41,7 @@ public slots:
 private:
 
     PoincareViewModel *model;
-    //Automaton *automaton;
+    Automaton *automaton;
     int animSpeed;
     QTimer *timer;
     QVBoxLayout *vbox;
