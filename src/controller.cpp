@@ -1,11 +1,5 @@
 #include "include/controller.h"
 
-#include <math.h> 
-#include <algorithm>
-#include <iostream>
-#include <vector>
-#include <unordered_set>
-
 #include <QCheckBox>
 #include <QHBoxLayout>
 #include <QLabel>
@@ -15,9 +9,15 @@
 #include <QVBoxLayout>
 #include <QWidget>
 
+#include <math.h>
+#include <algorithm>
+#include <iostream>
+#include <vector>
+#include <unordered_set>
+
+
 CellularController::CellularController(QWidget *parent, PoincareViewModel *model) :
     QWidget(parent) {
-
     this->model = model;
     this->automaton = new WireWorld();
 
@@ -34,7 +34,7 @@ CellularController::CellularController(QWidget *parent, PoincareViewModel *model
     vbox->addStretch(1);
     this->setLayout(vbox);
 }
-CellularController::~CellularController(){}
+CellularController::~CellularController() {}
 
 
 void CellularController::initAnimationButtons() {
@@ -129,7 +129,6 @@ void CellularController::initControlButtons() {
 
 void CellularController::startAnimation() {
     timer->start(animSpeed);
-    std::cout << animSpeed << std::endl;
 }
 
 void CellularController::stopAnimation() {
@@ -137,13 +136,11 @@ void CellularController::stopAnimation() {
 }
 
 void CellularController::nextGeneration() {
-    std::cout << "wah" << std::endl;
 }
 
 void CellularController::setSpeed(int speed) {
     animSpeed = speed;
     timer->setInterval(speed);
-
 }
 
 void CellularController::setSideCount(int count) {
@@ -177,7 +174,7 @@ void CellularController::randomize() {
     model->updateTiles();
 }
 void CellularController::toggleFill() {
-    model->toggleFillMode();    
+    model->toggleFillMode();
 }
 
 void CellularController::clicked(QMouseEvent *e) {}

@@ -1,8 +1,6 @@
 #ifndef TILE_H
 #define TILE_H
 
-#include <vector>
-
 #include <QPainter>
 #include <QPainterPath>
 #include <QPaintEvent>
@@ -11,23 +9,24 @@
 #include <QVector>
 #include <QWidget>
 
+#include <vector>
+
 #include "include/edge.h"
 #include "include/pcviewmodel.h"
 
 class PoincareViewModel;
 
 class Tile {
-
-public:
+ public:
     explicit Tile(QVector<QPointF *> *vertices, PoincareViewModel *model,
                     int layer, QPointF *center);
     virtual ~Tile();
 
-protected:
+ protected:
     void draw(QPainter *painter);
     void update(QPainter *painter);
 
-private:
+ private:
     bool fillMode;
     int layer;
 

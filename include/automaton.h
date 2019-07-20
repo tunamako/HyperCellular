@@ -1,14 +1,14 @@
 #ifndef AUTOMATON_H
 #define AUTOMATON_H
 
+#include <QVector>
+
 #include "include/pcviewmodel.h"
 #include "include/tile.h"
 
-#include <QVector>
 
 class Automaton {
-
-public:
+ public:
     Automaton();
     virtual ~Automaton();
 
@@ -19,8 +19,7 @@ public:
 };
 
 class WireWorld : public Automaton {
-
-public:
+ public:
     WireWorld();
     virtual ~WireWorld();
 
@@ -28,8 +27,7 @@ public:
 };
 
 class Life : public Automaton {
-
-public:
+ public:
     Life();
     virtual ~Life();
 

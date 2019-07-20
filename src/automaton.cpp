@@ -3,15 +3,10 @@
 Automaton::Automaton() {}
 Automaton::~Automaton() {}
 void Automaton::clicked(Tile *aTile) {
-
 }
-
 void Automaton::randomize(QVector<Tile*> *aTileList) {
-
 }
-
 void Automaton::fill(QVector<Tile*> *aTileList) {
-
 }
 
 void Automaton::nextGeneration(PoincareViewModel *model) {}

@@ -1,15 +1,14 @@
 #ifndef CELLULARCONTROLLER_H
 #define CELLULARCONTROLLER_H
 
-#include "include/pcviewmodel.h"
-#include "include/automaton.h"
-
 #include <QMouseEvent>
 #include <QSpinBox>
 #include <QTimer>
 #include <QVBoxLayout>
 #include <QWidget>
 
+#include "include/pcviewmodel.h"
+#include "include/automaton.h"
 
 namespace Ui {
 class CellularController;
@@ -18,13 +17,13 @@ class CellularController;
 class CellularController : public QWidget {
     Q_OBJECT
 
-public:
+ public:
     explicit CellularController(QWidget *parent, PoincareViewModel *model);
     ~CellularController();
 
     void clicked(QMouseEvent *e);
 
-public slots:
+ public slots:
     void startAnimation();
     void stopAnimation();
     void nextGeneration();
@@ -38,8 +37,7 @@ public slots:
     void randomize();
     void toggleFill();
 
-private:
-
+ private:
     PoincareViewModel *model;
     Automaton *automaton;
     int animSpeed;
@@ -53,7 +51,6 @@ private:
     void initAnimationButtons();
     void initSpinBoxes();
     void initControlButtons();
-
 };
 
 #endif // CELLULARCONTROLLER_H

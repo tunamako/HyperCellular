@@ -1,13 +1,11 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include "include/pcviewmodel.h"
-#include "include/controller.h"
-
-
 #include <QMainWindow>
 #include <QHBoxLayout>
 
+#include "include/pcviewmodel.h"
+#include "include/controller.h"
 
 namespace Ui {
 class MainWindow;
@@ -16,11 +14,11 @@ class MainWindow;
 class MainWindow : public QMainWindow {
     Q_OBJECT
 
-public:
+ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
-private:
+ private:
     PoincareViewModel *model;
     CellularController *controller;
 

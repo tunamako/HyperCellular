@@ -1,10 +1,6 @@
 #ifndef POINCAREVIEW_H
 #define POINCAREVIEW_H
 
-#include <string>
-#include <map>
-#include <unordered_set>
-
 #include <QPainter>
 #include <QPainterPath>
 #include <QPaintEvent>
@@ -12,6 +8,10 @@
 #include <QRegion>
 #include <QVector>
 #include <QWidget>
+
+#include <string>
+#include <map>
+#include <unordered_set>
 
 #include "include/tile.h"
 
@@ -21,8 +21,7 @@ class PoincareViewModel;
 }
 
 class PoincareViewModel : public QWidget {
-
-public:
+ public:
     int adjacentCount;
     int sideCount;
     int renderDepth;
@@ -38,10 +37,10 @@ public:
     void toggleFillMode();
     void updateTiles();
 
-private:
+ private:
     bool fillMode;
     bool tilesToUpdate;
-    int diskDiameter;
+    float diskDiameter;
     int drawnCount;
 
     QWidget *parent;
@@ -53,7 +52,7 @@ private:
 
     std::map<float, std::unordered_set<float> > drawnTiles;
 
-    void drawTiling();    
+    void drawTiling();
     QVector<QPointF *> getCenterVertices();
     Tile *hasBeenDrawn(QPointF *aPoint);
     void paintEvent(QPaintEvent *e);
