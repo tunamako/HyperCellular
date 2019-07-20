@@ -3,6 +3,7 @@
 
 #include "pcviewmodel.h"
 
+#include <QMouseEvent>
 #include <QSpinBox>
 #include <QTimer>
 #include <QVBoxLayout>
@@ -20,10 +21,7 @@ public:
     explicit CellularController(QWidget *parent, PoincareViewModel *model);
     ~CellularController();
 
-    void resetTiles();
-    void randomize();
-    void toggleFill();
-    //void clicked();
+    void clicked(QMouseEvent *e);
 
 public slots:
     void startAnimation();
@@ -34,6 +32,10 @@ public slots:
     void setSideCount(int count);
     void setAdjCount(int count);
     void setRenderDepth(int depth);
+
+    void resetTiles();
+    void randomize();
+    void toggleFill();
 
 private:
 

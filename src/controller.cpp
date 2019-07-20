@@ -41,13 +41,16 @@ void CellularController::initAnimationButtons() {
     QHBoxLayout *hbox = new QHBoxLayout();
 
     QPushButton *startButton = new QPushButton("Start");
-    connect(startButton, SIGNAL(clicked()), this, SLOT(startAnimation()));
+    connect(startButton, SIGNAL(clicked()),
+        this, SLOT(startAnimation()));
 
     QPushButton *stopButton = new QPushButton("Stop");
-    connect(stopButton, SIGNAL(clicked()), this, SLOT(stopAnimation()));
+    connect(stopButton, SIGNAL(clicked()),
+        this, SLOT(stopAnimation()));
 
     QPushButton *stepButton = new QPushButton("Step");
-    connect(stepButton, SIGNAL(clicked()), this, SLOT(nextGeneration()));
+    connect(stepButton, SIGNAL(clicked()),
+        this, SLOT(nextGeneration()));
 
     hbox->addWidget(startButton);
     hbox->addWidget(stopButton);
@@ -107,7 +110,21 @@ void CellularController::initSpinBoxes() {
 }
 
 void CellularController::initControlButtons() {
+    QPushButton *clearButton = new QPushButton("Clear");
+    connect(clearButton, SIGNAL(clicked()),
+        this, SLOT(resetTiles()));
 
+    QPushButton *randomizeButton = new QPushButton("Randomize");
+    connect(randomizeButton, SIGNAL(clicked()),
+        this, SLOT(randomize()));
+
+    QPushButton *toggleFillButton = new QPushButton("Toggle Fill");
+    connect(toggleFillButton, SIGNAL(clicked()),
+        this, SLOT(toggleFill()));
+
+    this->vbox->addWidget(clearButton);
+    this->vbox->addWidget(randomizeButton);
+    this->vbox->addWidget(toggleFillButton);
 }
 
 void CellularController::startAnimation() {
@@ -151,6 +168,16 @@ void CellularController::setRenderDepth(int depth) {
     model->setRenderDepth(depth);
 }
 
-void CellularController::resetTiles() {}
-void CellularController::randomize() {}
-void CellularController::toggleFill() {}
+void CellularController::resetTiles() {
+    //automaton->fill(model->tiles);
+    //model->updateTiles();
+}
+void CellularController::randomize() {
+    //automaton->randomize(model->tiles);
+    //model->updateTiles();
+}
+void CellularController::toggleFill() {
+    //model->toggleFillMode();    
+}
+
+void CellularController::clicked(QMouseEvent *e) {}
