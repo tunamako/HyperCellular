@@ -23,14 +23,19 @@ class PoincareViewModel;
 class PoincareViewModel : public QWidget {
 
 public:
+    int adjacentCount;
+    int sideCount;
+    int renderDepth;
+
     explicit PoincareViewModel(QWidget *parent);
     virtual ~PoincareViewModel();
 
+    int setSideCount(int count);
+    int setAdjCount(int count);
+    void setRenderDepth(int depth);
+
 protected:
     bool areHyperbolicDims(int p, int q);
-    int setAdjCount(int count);
-    int setSideCount(int count);
-    void setRenderDepth(int depth);
     void toggleFillMode();
     void updateTiles();
     // void mousePressEvent();
@@ -38,11 +43,8 @@ protected:
 private:
     bool fillMode;
     bool tilesToUpdate;
-    int adjacentCount;
     int diskDiameter;
     int drawnCount;
-    int sideCount;
-    int renderDepth;
 
     QWidget *parent;
     QVector<QPointF *> *centerVertices;
