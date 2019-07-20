@@ -14,12 +14,12 @@ class CellularController;
 }
 
 class CellularController : public QWidget {
+	Q_OBJECT
 
 public:
     explicit CellularController(QWidget *parent, PoincareViewModel *model);
     ~CellularController();
 
-    void nextGeneration();
     void setSpeed(int speed);
     void setSideCount(int count);
     void setAdjCount(int count);
@@ -29,6 +29,10 @@ public:
     void toggleFill();
     //void clicked();
 
+public slots:
+	void startAnimation();
+	void stopAnimation();
+    void nextGeneration();
 
 private:
 
