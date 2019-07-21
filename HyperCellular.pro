@@ -46,4 +46,4 @@ HEADERS += \
 OBJECTS_DIR += build
 MOC_DIR += build
 
-QMAKE_CXXFLAGS += -lgtest -Wunused-parameter -g 
+QMAKE_CXXFLAGS += -lgtest -Wall -g 

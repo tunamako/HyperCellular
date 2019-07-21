@@ -22,6 +22,8 @@ class Tile {
                     int layer, QPointF *center);
     virtual ~Tile();
 
+    QPointF *center;
+
  protected:
     void draw(QPainter *painter);
     void update(QPainter *painter);
@@ -33,7 +35,6 @@ class Tile {
     std::vector<Edge *> *edges;
     std::vector<Tile *> *neighbors;
     QVector<QPointF *> *vertices;
-    QPointF *center;
     QColor *color;
     QColor *nextColor;
     QRegion *region;

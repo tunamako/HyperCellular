@@ -5,6 +5,7 @@
 
 QPointF midpoint(QPointF *A, QPointF *B);
 float distance(QPointF *A, QPointF *B);
+float slope(QPointF *A, QPointF *B);
 bool areCollinear(QPointF *A, QPointF *B, QPointF *C);
 
-#endif
+#endif //HELP_H

@@ -15,11 +15,12 @@
 
 #include "include/math_helpers.h"
 
+#define PI 3.14159265
+
 PoincareViewModel::PoincareViewModel(QWidget *parent) :
     QWidget(parent) {
     this->parent = parent;
 
-    this->centerVertices = new QVector<QPointF *>();
     this->origin = new QPointF();
 
     this->drawnCount = 0;
@@ -27,8 +28,40 @@ PoincareViewModel::PoincareViewModel(QWidget *parent) :
     this->sideCount = 5;
     this->adjacentCount = 4;
     this->renderDepth = 6;
+    this->centerVertices = QVector<QPointF>();
 }
 PoincareViewModel::~PoincareViewModel() {}
+
+void PoincareViewModel::genCenterVertices() {
+    centerVertices.clear();
+    int p = sideCount;
+    int q = adjacentCount;
+    float dist = (diskDiameter/2) * sqrt(cos(M_PI/p + M_PI/q)*cos(M_PI/q) / (sin(2*M_PI/q) * sin(M_PI/p) + cos(M_PI/p + M_PI/q)* cos(M_PI/q)));
+    float alpha = 2 * M_PI/p;
+
+    float x, y;
+    for (int i = 0; i < p; i++) {
+        x = origin->x() + (dist) * cos(i * alpha);
+        y = origin->y() + (dist) * sin(i * alpha);
+        centerVertices.push_back(QPointF(x, y));
+    }
+}
+
+bool PoincareViewModel::hasBeenDrawn(QPointF *aPoint) {
+    float precision = 1000;
+    float x = round(precision * aPoint->x())/precision;
+    float y = round(precision * aPoint->y())/precision;
+
+    //drawnTiles[x][y] = aPoint;
+}
+
+void PoincareViewModel::addDrawnTile(Tile *aTile) {
+    float precision = 1000;
+    float x = round(precision * aTile->center->x())/precision;
+    float y = round(precision * aTile->center->y())/precision;
+
+    //drawnTiles[x][y] = aTile;
+}
 
 void PoincareViewModel::paintEvent(QPaintEvent *e) {
     this->painter = new QPainter(this);
@@ -44,8 +77,8 @@ void PoincareViewModel::paintEvent(QPaintEvent *e) {
     float x = origin->x();
     float y = origin->y();
 
-    QRect *diskRect = new QRect(x - radius, y - radius, diskDiameter, diskDiameter);
-    diskRegion = new QRegion(*diskRect, QRegion::Ellipse);
+    QRect diskRect = QRect(x - radius, y - radius, diskDiameter, diskDiameter);
+    diskRegion = new QRegion(diskRect, QRegion::Ellipse);
     this->painter->setClipRegion(*diskRegion);
 
     if (tilesToUpdate) {
@@ -53,12 +86,19 @@ void PoincareViewModel::paintEvent(QPaintEvent *e) {
         // drawTiling();
     }
 
+    genCenterVertices();
+    for (int i = 0; i < sideCount; i++) {
+        this->painter->drawPoint(centerVertices[i]);
+    }
+    
     this->painter->setClipping(false);
     this->painter->setPen(QPen(QColor(5, 0, 127, 255), 3));
-    this->painter->drawEllipse(*diskRect);
+    this->painter->drawEllipse(diskRect);
     this->painter->drawPoint(*origin);
 
     this->painter->end();
+    free(this->painter);
+    free(this->diskRegion);
 }
 
 bool PoincareViewModel::areHyperbolicDims(int p, int q) {
