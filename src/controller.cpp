@@ -166,11 +166,11 @@ void CellularController::setRenderDepth(int depth) {
 }
 
 void CellularController::resetTiles() {
-    automaton->fill(model->tiles);
+    automaton->fill(&model->tiles);
     model->updateTiles();
 }
 void CellularController::randomize() {
-    automaton->randomize(model->tiles);
+    automaton->randomize(&model->tiles);
     model->updateTiles();
 }
 void CellularController::toggleFill() {
