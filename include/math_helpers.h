@@ -3,9 +3,9 @@
 
 #include <QPoint>
 
-QPointF midpoint(QPointF *A, QPointF *B);
-float distance(QPointF *A, QPointF *B);
-float slope(QPointF *A, QPointF *B);
-bool areCollinear(QPointF *A, QPointF *B, QPointF *C);
+QPointF midpoint(QPointF A, QPointF B);
+float distance(QPointF A, QPointF B);
+float slope_helper(QPointF A, QPointF B);
+bool areCollinear(QPointF A, QPointF B, QPointF C);
 
 #endif //HELP_H

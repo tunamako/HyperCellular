@@ -27,6 +27,7 @@ PoincareViewModel::PoincareViewModel(QWidget *parent) :
     this->adjacentCount = 4;
     this->renderDepth = 6;
     this->fillMode = false;
+    this->tilesToUpdate = false;
     this->centerVertices = QVector<QPointF>();
     this->drawnTiles = std::map<float, std::unordered_set<float> >();
 }
@@ -55,12 +56,24 @@ bool PoincareViewModel::hasBeenDrawn(QPointF &aPoint) {
     // drawnTiles[x][y] = aPoint;
 }
 
-void PoincareViewModel::addDrawnTile(Tile &aTile) {
+void PoincareViewModel::addDrawnTile(Tile *aTile) {
     float precision = 1000;
-    float x = round(precision * aTile.center.x())/precision;
-    float y = round(precision * aTile.center.y())/precision;
+    float x = round(precision * aTile->center.x())/precision;
+    float y = round(precision * aTile->center.y())/precision;
 
     // drawnTiles[x][y] = aTile;
+}
+
+void PoincareViewModel::drawTiling() {
+    drawnCount = 0;
+    drawnTiles.clear();
+    tiles.clear();
+
+    genCenterVertices();
+
+    Tile *centerTile = new Tile(centerVertices, *this, renderDepth, origin);
+    addDrawnTile(centerTile);
+    centerTile->draw(this->painter);
 }
 
 void PoincareViewModel::paintEvent(QPaintEvent *e) {
@@ -83,10 +96,9 @@ void PoincareViewModel::paintEvent(QPaintEvent *e) {
 
     if (tilesToUpdate) {
     } else {
-        // drawTiling();
+        drawTiling();
     }
 
-    genCenterVertices();
     this->painter->setClipping(false);
     this->painter->setPen(QPen(QColor(5, 0, 127, 255), 3));
     this->painter->drawEllipse(diskRect);
@@ -126,7 +138,7 @@ void PoincareViewModel::setRenderDepth(int depth) {
 }
 
 void PoincareViewModel::updateTiles() {
-    tilesToUpdate = true;
+    //tilesToUpdate = true;
     update();
 }
 

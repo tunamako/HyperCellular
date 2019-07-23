@@ -7,51 +7,45 @@
 #include <QVector>
 
 class Edge {
-
-public:
+ public:
     Edge();
-    virtual ~Edge();
 
     QVector<QPointF *> *reflectTile(QVector<QPointF *> *aPoint);
 
-    virtual QPointF *reflectPoint(QPointF *aPoint);
+    virtual QPointF reflectPoint(QPointF aPoint);
     virtual void draw(QPainter *painter);
-    virtual void getRegion(QPointF *polygonCenter, QPointF *origin, float radius);
+    virtual void getRegion(QPointF *polygonCenter, QPointF origin, float radius);
 };
 
 class LineEdge : public Edge {
+ public:
+    LineEdge(QPointF pointA, QPointF pointB);
 
-public:
-    LineEdge(QPointF *A, QPointF *B);
-    virtual ~LineEdge();
-
-    virtual QPointF *reflectPoint(QPointF *aPoint);
+    virtual QPointF reflectPoint(QPointF aPoint);
     virtual void draw(QPainter *painter);
-    virtual void getRegion(QPointF *polygonCenter, QPointF *origin, float radius);
+    virtual void getRegion(QPointF *polygonCenter, QPointF origin, float radius);
 
-
-protected:
-    QPointF *A;
-    QPointF *B;
+ private:
+    QPointF A;
+    QPointF B;
     float y_intercept;
     float slope;
 };
 
 class ArcEdge : public Edge {
+ public:
+    ArcEdge(QPointF pointA, QPointF pointB, QPointF origin, float diskDiameter);
 
-public:
-    ArcEdge(QPointF *A, QPointF *B, QPointF *origin, float diskDiameter);
-    virtual ~ArcEdge();
-
-    virtual QPointF *reflectPoint(QPointF *aPoint);
+    virtual QPointF reflectPoint(QPointF aPoint);
     virtual void draw(QPainter *painter);
-    virtual void getRegion(QPointF *polygonCenter, QPointF *origin, float radius);
+    virtual void getRegion(QPointF *polygonCenter, QPointF origin, float radius);
 
-protected:
-    QPointF *A;
-    QPointF *B;
-    QPointF *center;
+ private:
+    QPointF A;
+    QPointF B;
+    QPointF center;
     float radius;
+    bool collinear;
 };
 
 #endif // EDGE_H

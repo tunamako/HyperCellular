@@ -18,7 +18,7 @@ class PoincareViewModel;
 
 class Tile {
  public:
-    explicit Tile(QVector<QPointF> vertices, PoincareViewModel &model,
+    explicit Tile(QVector<QPointF> &vertices, PoincareViewModel &model,
                     int layer, QPointF center);
     QPointF center;
 

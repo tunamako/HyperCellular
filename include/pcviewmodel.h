@@ -27,8 +27,10 @@ class PoincareViewModel : public QWidget {
     int sideCount;
     int renderDepth;
     bool fillMode;
+    float diskDiameter;
     QVector<Tile *> tiles;
     QRegion diskRegion;
+    QPointF origin;
 
     explicit PoincareViewModel(QWidget *parent);
     virtual ~PoincareViewModel();
@@ -42,21 +44,19 @@ class PoincareViewModel : public QWidget {
 
  private:
     bool tilesToUpdate;
-    float diskDiameter;
     int drawnCount;
 
     QWidget *parent;
     QPainter *painter;
     QVector<QPointF> centerVertices;
     QPainterPath diskPath;
-    QPointF origin;
 
     std::map<float, std::unordered_set<float> > drawnTiles;
 
     void drawTiling();
     void genCenterVertices();
     bool hasBeenDrawn(QPointF &aPoint);
-    void addDrawnTile(Tile &aTile);
+    void addDrawnTile(Tile *aTile);
     void paintEvent(QPaintEvent *e);
     bool areHyperbolicDims(int p, int q);
     // void mousePressEvent();
