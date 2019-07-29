@@ -27,7 +27,7 @@ LineEdge::LineEdge(QPointF pointA, QPointF pointB) {
 
     this->slope = slope_helper(A, B);
 
-    if (std::isinf(this->slope)) {
+    if (std::isinf(this->slope) || std::isnan(std::abs(this->slope))) {
         this->slope = std::numeric_limits<float>::infinity();
         this->y_intercept = std::numeric_limits<float>::infinity();
     } else {
@@ -44,7 +44,7 @@ QPointF LineEdge::reflectPoint(QPointF aPoint) {
     float invX;
     float invY;
 
-    if (std::isinf(m)) {
+    if (std::isinf(m) || std::isnan(std::abs(m))) {
         // axis of reflection is vertical
         invX = x - 2 * (x - A.x());
         invY = y;
@@ -70,28 +70,39 @@ void LineEdge::getRegion(QPointF *polygonCenter, QPointF origin, float radius) {
 ArcEdge::ArcEdge(QPointF pointA, QPointF pointB, QPointF origin, float diskDiameter) {
     this->A = QPointF(pointA.x(), pointA.y());
     this->B = QPointF(pointB.x(), pointB.y());
-
     this->center = origin;
     this->radius = diskDiameter/2;
     QPointF pointC = this->reflectPoint(pointA);
 
     // Check if given points form a vertical segment: if so, rearrange points
-    if (pointB.x() - pointA.x() <= 0.0001) {
+    if (abs(pointB.x() - pointA.x()) <= 0.0001) {
         std::swap(pointB, pointC);
-    } else if (pointC.x() - pointB.x() <= 0.0001) {
-        std::swap(pointA, pointB);
+    } else if (abs(pointC.x() - origin.x()) <= 0.0001) {
+        pointC = this->reflectPoint(pointB);
     }
 
     float mA = slope_helper(pointA, pointB);
     float mB = slope_helper(pointB, pointC);
-    if (std::isinf(mA) || std::isinf(mB)) {
+
+    if (std::isinf(mA) || std::isinf(mB)
+        || std::isnan(std::abs(mA))
+        || std::isnan(std::abs(mB))) {
+
+        std::cout << origin.x() << ", " << origin.y() << std::endl;
+        std::cout << this->A.x() << ", " << this->A.y() << std::endl;
+        std::cout << this->B.x() << ", " << this->B.y() << std::endl;
+        std::cout << pointC.x() << ", " << pointC.y() << std::endl << std::endl;
+
         return;
     }
 
     // Use the intersection of the perpendicular bisectors of AB and BC as the center of the circle
     float centerX = (mA*mB*(pointA.y()-pointC.y()) + mB*(pointA.x()+pointB.x()) - mA*(pointB.x() + pointC.x())) / (2*(mB - mA));
+    
+    //std::cout << centerX <<  ", " << mA << ", " << mB << std::endl;
     float centerY = (-1/mA)*(centerX - (pointA.x() + pointB.x())/2) + (pointA.y() + pointB.y())/2;
-    if (std::isinf(centerY)) {
+
+    if (std::isinf(centerY) || std::isnan(std::abs(centerY))) {
         centerY = (-1/mB)*(centerX - (pointB.x() + pointC.x())/2) + (pointB.y() + pointC.y())/2;
     }
 

@@ -27,7 +27,9 @@ bool areCollinear(QPointF A, QPointF B, QPointF C) {
     float slopeBC = slope_helper(B, C);
     float slopeAB = slope_helper(A, B);
 
-    if (std::isinf(slopeBC) || std::isinf(slopeAB)) {
+    if (std::isinf(slopeBC) || std::isinf(slopeAB)
+        || std::isnan(std::abs(slopeBC))
+        || std::isnan(std::abs(slopeAB))) {
         return false;
     } else {
         return abs(slopeBC - slopeAB) <= 0.0000001;

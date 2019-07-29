@@ -23,8 +23,8 @@ PoincareViewModel::PoincareViewModel(QWidget *parent) :
 
     this->origin = QPointF();
     this->drawnCount = 0;
-    this->sideCount = 5;
-    this->adjacentCount = 4;
+    this->sideCount = 8;
+    this->adjacentCount = 3;
     this->renderDepth = 6;
     this->fillMode = false;
     this->tilesToUpdate = false;
@@ -83,7 +83,6 @@ void PoincareViewModel::paintEvent(QPaintEvent *e) {
     diskDiameter = std::min(this->size().width(), this->size().height());
     origin.setX(this->size().width()/2);
     origin.setY(this->size().height()/2);
-
     this->painter->setPen(QPen(QColor(122, 0, 127, 255), 3));
 
     float radius = diskDiameter/2;

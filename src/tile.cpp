@@ -2,6 +2,7 @@
 
 #include <QPointF>
 #include <QVector>
+#include <iostream>
 
 #include <include/math_helpers.h>
 
