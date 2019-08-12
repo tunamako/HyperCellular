@@ -25,7 +25,7 @@ PoincareViewModel::PoincareViewModel(QWidget *parent) :
     this->drawnCount = 0;
     this->sideCount = 5;
     this->adjacentCount = 4;
-    this->renderDepth = 6;
+    this->renderDepth = 2;
     this->fillMode = false;
     this->tilesToUpdate = false;
     this->centerVertices = QVector<QPointF>();
@@ -70,11 +70,38 @@ void PoincareViewModel::drawTiling() {
     drawnCount = 0;
     drawnTiles.clear();
     tiles.clear();
+    QVector<Tile *> queue;
 
     genCenterVertices();
 
     Tile *centerTile = new Tile(centerVertices, *this, renderDepth, origin);
-    addDrawnTile(centerTile);
+    queue.push_back(centerTile);
+
+    while(!queue.empty()) {
+        Tile *curTile = queue.front();
+        queue.pop_front();
+
+        curTile->draw(this->painter);
+        tiles.push_back(curTile);
+
+        if (curTile->layer == 1) {
+            continue;
+        }
+
+        for (auto edge : curTile->edges) {
+            // First reflect the center of the current tile to check if the
+            // reflected tile has been drawn before
+            QPointF reflectedCenter = edge->reflectPoint(curTile->center);
+            QVector<QPointF> reflectedVertices = edge->reflectTile(curTile);
+            Tile *neighbor = new Tile(reflectedVertices, *this, curTile->layer - 1, reflectedCenter);
+
+            queue.push_back(neighbor);
+
+            curTile->neighbors.push_back(neighbor);
+        }
+
+    }
+
     centerTile->draw(this->painter);
     delete centerTile;
 }

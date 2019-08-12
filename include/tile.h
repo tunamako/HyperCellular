@@ -14,6 +14,7 @@
 #include "include/edge.h"
 #include "include/pcviewmodel.h"
 
+class Edge;
 class PoincareViewModel;
 
 class Tile {
@@ -21,18 +22,18 @@ class Tile {
     explicit Tile(QVector<QPointF> &vertices, PoincareViewModel &model,
                     int layer, QPointF center);
     ~Tile();
+    int layer;
     QPointF center;
+    std::vector<Edge *> edges;
+    std::vector<Tile *> neighbors;
+    QVector<QPointF> vertices;
 
     void draw(QPainter *painter);
     void update(QPainter *painter);
 
  private:
     bool fillMode;
-    int layer;
 
-    std::vector<Edge *> edges;
-    std::vector<Tile *> neighbors;
-    QVector<QPointF> vertices;
     QColor color;
     QColor nextColor;
     QRegion region;

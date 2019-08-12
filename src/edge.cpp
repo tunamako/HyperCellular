@@ -13,7 +13,7 @@
 #include <vector>
 
 #include "include/math_helpers.h"
-
+#include "include/tile.h"
 
 bool arePerpendicular(QPointF pt1, QPointF pt2, QPointF pt3) {
     // Check the given points are perpendicular to x or y axis 
@@ -43,9 +43,9 @@ Edge *Edge::create(QPointF pointA, QPointF pointB, QPointF origin, float diskDia
     }
 }
 
-QVector<QPointF> Edge::reflectTile(QVector<QPointF> vertices) {
+QVector<QPointF> Edge::reflectTile(Tile *aTile) {
     QVector<QPointF> ret;
-    for (auto v : vertices) {
+    for (auto v : aTile->vertices) {
         ret.push_back(this->reflectPoint(v));
     }
     return ret;

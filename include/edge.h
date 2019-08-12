@@ -6,6 +6,10 @@
 #include <QPoint>
 #include <QVector>
 
+#include "include/tile.h"
+
+class Tile;
+
 class Edge {
  public:
     Edge();
@@ -13,7 +17,7 @@ class Edge {
 
     static Edge *create(QPointF pointA, QPointF pointB, QPointF origin, float diskDiameter);
 
-    QVector<QPointF> reflectTile(QVector<QPointF> aPoint);
+    QVector<QPointF> reflectTile(Tile *aTile);
 
     virtual QPointF reflectPoint(QPointF) = 0;
     virtual void draw(QPainter *);
