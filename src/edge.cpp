@@ -1,6 +1,7 @@
 #include "include/edge.h"
 
 #include <QPointF>
+#include <QtDebug>
 
 #include <math.h>
 #include <algorithm>
@@ -14,11 +15,44 @@
 #include "include/math_helpers.h"
 
 
+bool arePerpendicular(QPointF pt1, QPointF pt2, QPointF pt3) {
+    // Check the given points are perpendicular to x or y axis 
+    double yDelta_a = fabs(pt2.y() - pt1.y());
+    double xDelta_a = fabs(pt2.x() - pt1.x());
+    double yDelta_b = fabs(pt3.y() - pt2.y());
+    double xDelta_b = fabs(pt3.x() - pt2.x());
+
+    if (xDelta_a <= 0.000000001 && yDelta_b <= 0.000000001) {
+        return false;
+    }
+
+    return (yDelta_a <= 0.000000001 || \
+            yDelta_b <= 0.000000001 || \
+            xDelta_a <= 0.000000001 || \
+            xDelta_b <= 0.000000001);
+}
+
 Edge::Edge() {}
-QPointF Edge::reflectPoint(QPointF aPoint) {}
-QVector<QPointF *> *Edge::reflectTile(QVector<QPointF *> *aPoint) {}
-void Edge::draw(QPainter *painter) {}
-void Edge::getRegion(QPointF *polygonCenter, QPointF origin, float radius) {}
+Edge::~Edge() {}
+
+Edge *Edge::create(QPointF pointA, QPointF pointB, QPointF origin, float diskDiameter) {
+    if (areCollinear(pointA, pointB, origin)) {
+        return new LineEdge(pointA, pointB);
+    } else{
+        return new ArcEdge(pointA, pointB, origin, diskDiameter);
+    }
+}
+
+QVector<QPointF> Edge::reflectTile(QVector<QPointF> vertices) {
+    QVector<QPointF> ret;
+    for (auto v : vertices) {
+        ret.push_back(this->reflectPoint(v));
+    }
+    return ret;
+}
+
+void Edge::draw(QPainter *) {}
+void Edge::getRegion(QPointF *, QPointF, float) {}
 
 
 LineEdge::LineEdge(QPointF pointA, QPointF pointB) {
@@ -36,7 +70,6 @@ LineEdge::LineEdge(QPointF pointA, QPointF pointB) {
 }
 
 QPointF LineEdge::reflectPoint(QPointF aPoint) {
-    float denom = 1 + pow(A.x(), 2);
     float m = slope;
     float b = y_intercept;
     float x = aPoint.x();
@@ -48,7 +81,7 @@ QPointF LineEdge::reflectPoint(QPointF aPoint) {
         // axis of reflection is vertical
         invX = x - 2 * (x - A.x());
         invY = y;
-    } else if (-0.001 <= m && m <= 0.001) {
+    } else if (fabs(m) < 0.000000001) {
         // axis of reflection is horizontal
         invX = x;
         invY = y - 2 * (y - A.y());
@@ -58,6 +91,7 @@ QPointF LineEdge::reflectPoint(QPointF aPoint) {
         invX = x + 2 * (intersectX - x);
         invY = y + 2 * (intersectY - y);
     }
+    return QPointF(invX, invY);
 }
 
 void LineEdge::draw(QPainter *painter) {
@@ -67,47 +101,28 @@ void LineEdge::draw(QPainter *painter) {
 void LineEdge::getRegion(QPointF *polygonCenter, QPointF origin, float radius) {}
 
 
-ArcEdge::ArcEdge(QPointF pointA, QPointF pointB, QPointF origin, float diskDiameter) {
-    this->A = QPointF(pointA.x(), pointA.y());
-    this->B = QPointF(pointB.x(), pointB.y());
+ArcEdge::ArcEdge(QPointF pA, QPointF pB, QPointF origin, float diskDiameter) {
+    this->A = QPointF(pA.x(), pA.y());
+    this->B = QPointF(pB.x(), pB.y());
     this->center = origin;
     this->radius = diskDiameter/2;
-    QPointF pointC = this->reflectPoint(pointA);
+    QPointF pC = this->reflectPoint(pA);
 
-    // Check if given points form a vertical segment: if so, rearrange points
-    if (abs(pointB.x() - pointA.x()) <= 0.0001) {
-        std::swap(pointB, pointC);
-    } else if (abs(pointC.x() - origin.x()) <= 0.0001) {
-        pointC = this->reflectPoint(pointB);
+    if (!arePerpendicular(pA, pB, pC)) {
+        this->center = getCircleCenter(pA, pB, pC);
+    } else if (!arePerpendicular(pA, pC, pB)) {
+        this->center = getCircleCenter(pA, pC, pB);
+    } else if (!arePerpendicular(pB, pA, pC)) {
+        this->center = getCircleCenter(pB, pA, pC);
+    } else if (!arePerpendicular(pB, pC, pA)) {
+        this->center = getCircleCenter(pB, pC, pA);
+    } else if (!arePerpendicular(pC, pB, pA)) {
+        this->center = getCircleCenter(pC, pB, pA);
+    } else if (!arePerpendicular(pA, pC, pB)) {
+        this->center = getCircleCenter(pC, pA, pB);
     }
 
-    float mA = slope_helper(pointA, pointB);
-    float mB = slope_helper(pointB, pointC);
-
-    if (std::isinf(mA) || std::isinf(mB)
-        || std::isnan(std::abs(mA))
-        || std::isnan(std::abs(mB))) {
-
-        std::cout << origin.x() << ", " << origin.y() << std::endl;
-        std::cout << this->A.x() << ", " << this->A.y() << std::endl;
-        std::cout << this->B.x() << ", " << this->B.y() << std::endl;
-        std::cout << pointC.x() << ", " << pointC.y() << std::endl << std::endl;
-
-        return;
-    }
-
-    // Use the intersection of the perpendicular bisectors of AB and BC as the center of the circle
-    float centerX = (mA*mB*(pointA.y()-pointC.y()) + mB*(pointA.x()+pointB.x()) - mA*(pointB.x() + pointC.x())) / (2*(mB - mA));
-    
-    //std::cout << centerX <<  ", " << mA << ", " << mB << std::endl;
-    float centerY = (-1/mA)*(centerX - (pointA.x() + pointB.x())/2) + (pointA.y() + pointB.y())/2;
-
-    if (std::isinf(centerY) || std::isnan(std::abs(centerY))) {
-        centerY = (-1/mB)*(centerX - (pointB.x() + pointC.x())/2) + (pointB.y() + pointC.y())/2;
-    }
-
-    this->center = QPointF(centerX, centerY);
-    this->radius = distance(this->center, pointA);
+    this->radius = distance(this->center, pA);
     this->collinear = false;
 }
 

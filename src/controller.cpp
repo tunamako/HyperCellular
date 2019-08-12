@@ -177,4 +177,4 @@ void CellularController::toggleFill() {
     model->toggleFillMode();
 }
 
-void CellularController::clicked(QMouseEvent *e) {}
+//void CellularController::clicked(QMouseEvent *e) {}

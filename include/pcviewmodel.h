@@ -57,7 +57,7 @@ class PoincareViewModel : public QWidget {
     void genCenterVertices();
     bool hasBeenDrawn(QPointF &aPoint);
     void addDrawnTile(Tile *aTile);
-    void paintEvent(QPaintEvent *e);
+    void paintEvent(QPaintEvent *);
     bool areHyperbolicDims(int p, int q);
     // void mousePressEvent();
 };

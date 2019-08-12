@@ -20,6 +20,7 @@ class Tile {
  public:
     explicit Tile(QVector<QPointF> &vertices, PoincareViewModel &model,
                     int layer, QPointF center);
+    ~Tile();
     QPointF center;
 
     void draw(QPainter *painter);

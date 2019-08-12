@@ -15,7 +15,7 @@ class Automaton {
     void clicked(Tile *aTile);
     void randomize(QVector<Tile*> *aTileList);
     void fill(QVector<Tile*> *aTileList);
-    virtual void nextGeneration(PoincareViewModel *model);
+    virtual void nextGeneration(PoincareViewModel *);
 };
 
 class WireWorld : public Automaton {

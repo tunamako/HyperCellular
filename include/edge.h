@@ -9,12 +9,15 @@
 class Edge {
  public:
     Edge();
+    virtual ~Edge();
 
-    QVector<QPointF *> *reflectTile(QVector<QPointF *> *aPoint);
+    static Edge *create(QPointF pointA, QPointF pointB, QPointF origin, float diskDiameter);
 
-    virtual QPointF reflectPoint(QPointF aPoint);
-    virtual void draw(QPainter *painter);
-    virtual void getRegion(QPointF *polygonCenter, QPointF origin, float radius);
+    QVector<QPointF> reflectTile(QVector<QPointF> aPoint);
+
+    virtual QPointF reflectPoint(QPointF) = 0;
+    virtual void draw(QPainter *);
+    virtual void getRegion(QPointF *, QPointF, float);
 };
 
 class LineEdge : public Edge {

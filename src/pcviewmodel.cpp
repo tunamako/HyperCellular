@@ -23,8 +23,8 @@ PoincareViewModel::PoincareViewModel(QWidget *parent) :
 
     this->origin = QPointF();
     this->drawnCount = 0;
-    this->sideCount = 8;
-    this->adjacentCount = 3;
+    this->sideCount = 5;
+    this->adjacentCount = 4;
     this->renderDepth = 6;
     this->fillMode = false;
     this->tilesToUpdate = false;
@@ -53,6 +53,8 @@ bool PoincareViewModel::hasBeenDrawn(QPointF &aPoint) {
     float x = round(precision * aPoint.x())/precision;
     float y = round(precision * aPoint.y())/precision;
 
+    if (x == y) {}
+    return false;
     // drawnTiles[x][y] = aPoint;
 }
 
@@ -60,7 +62,7 @@ void PoincareViewModel::addDrawnTile(Tile *aTile) {
     float precision = 1000;
     float x = round(precision * aTile->center.x())/precision;
     float y = round(precision * aTile->center.y())/precision;
-
+    if (x == y) {}
     // drawnTiles[x][y] = aTile;
 }
 
@@ -74,9 +76,10 @@ void PoincareViewModel::drawTiling() {
     Tile *centerTile = new Tile(centerVertices, *this, renderDepth, origin);
     addDrawnTile(centerTile);
     centerTile->draw(this->painter);
+    delete centerTile;
 }
 
-void PoincareViewModel::paintEvent(QPaintEvent *e) {
+void PoincareViewModel::paintEvent(QPaintEvent *) {
     this->painter = new QPainter(this);
     this->painter->setRenderHint(QPainter::Antialiasing, true);
 
@@ -104,7 +107,7 @@ void PoincareViewModel::paintEvent(QPaintEvent *e) {
     this->painter->drawPoint(origin);
 
     this->painter->end();
-    free(this->painter);
+    delete this->painter;
 }
 
 bool PoincareViewModel::areHyperbolicDims(int p, int q) {
