@@ -15,10 +15,9 @@
 #include <vector>
 #include <unordered_set>
 
-
-CellularController::CellularController(QWidget *parent, PoincareViewModel *model) :
+CellularController::CellularController(QWidget *parent) :
     QWidget(parent) {
-    this->model = model;
+    this->model = PoincareViewModel::getInstance();
     this->automaton = new WireWorld();
 
     resetTiles();

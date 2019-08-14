@@ -15,7 +15,7 @@ class Edge {
     Edge();
     virtual ~Edge();
 
-    static Edge *create(QPointF pointA, QPointF pointB, QPointF origin, float diskDiameter);
+    static Edge *create(QPointF pointA, QPointF pointB);
 
     QVector<QPointF> reflectTile(Tile *aTile);
 

@@ -8,8 +8,8 @@
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent) {
-        this->model = new PoincareViewModel(this);
-        this->controller = new CellularController(this, this->model);
+        this->model = PoincareViewModel::getInstance(this);
+        this->controller = new CellularController(this);
 
         this->hbox = new QHBoxLayout();
         this->hbox->addWidget(this->controller);

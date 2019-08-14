@@ -5,11 +5,10 @@
 #include <iostream>
 
 #include <include/math_helpers.h>
+#include <include/pcviewmodel.h>
 
 
-Tile::Tile(QVector<QPointF> &vertices, PoincareViewModel &model,
-    int layer, QPointF center) {
-
+Tile::Tile(QVector<QPointF> vertices, QPointF center) {
     this->edges = std::vector<Edge *>();
     this->neighbors = std::vector<Tile *>();
     this->center = center;
@@ -17,24 +16,34 @@ Tile::Tile(QVector<QPointF> &vertices, PoincareViewModel &model,
     this->vertices = vertices;
     this->color = QColor(0, 0, 0, 255);
     this->nextColor = nullptr;
-    this->fillMode = model.fillMode;
-    this->region = model.diskRegion;
+
+    this->fillMode = PoincareViewModel::getInstance()->fillMode;
+    this->region = PoincareViewModel::getInstance()->diskRegion;
 
     for (int i = 0; i < vertices.size() - 1; ++i) {
-        Edge * edge = Edge::create(vertices[i], vertices[i+1], model.origin, model.diskDiameter);
+        Edge * edge = Edge::create(vertices[i], vertices[i+1]);
         this->edges.push_back(edge);
     }
-    Edge * edge = Edge::create(vertices.back(), vertices[0], model.origin, model.diskDiameter);
+    Edge * edge = Edge::create(vertices.back(), vertices[0]);
     this->edges.push_back(edge);
 }
 
 Tile::~Tile() {
-    for (auto v : edges) {
-        delete v;
+    for (auto edge : edges) {
+        delete edge;
+    }
+    for (auto tile : neighbors) {
+        delete tile;
     }
 }
 
-void Tile::draw(QPainter *painter) {
+void Tile::constructTiling(int renderDepth) {
+
+}
+
+void Tile::draw() {
+    QPainter *painter = PoincareViewModel::getInstance()->painter;
+
     if (fillMode) {
         QPainterPath path = QPainterPath();
         path.addRegion(this->region);
@@ -46,10 +55,10 @@ void Tile::draw(QPainter *painter) {
     }
 }
 
-void Tile::update(QPainter *painter) {
+void Tile::update() {
     if (nextColor != nullptr) {
         this->color = this->nextColor;
         this->nextColor = nullptr;
     }
-    this->draw(painter);
+    this->draw();
 }

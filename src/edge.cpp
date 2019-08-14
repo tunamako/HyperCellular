@@ -13,6 +13,7 @@
 #include <vector>
 
 #include "include/math_helpers.h"
+#include "include/pcviewmodel.h"
 #include "include/tile.h"
 
 bool arePerpendicular(QPointF pt1, QPointF pt2, QPointF pt3) {
@@ -35,7 +36,10 @@ bool arePerpendicular(QPointF pt1, QPointF pt2, QPointF pt3) {
 Edge::Edge() {}
 Edge::~Edge() {}
 
-Edge *Edge::create(QPointF pointA, QPointF pointB, QPointF origin, float diskDiameter) {
+Edge *Edge::create(QPointF pointA, QPointF pointB) {
+    QPointF origin = PoincareViewModel::getInstance()->origin;
+    float diskDiameter = PoincareViewModel::getInstance()->diskDiameter;
+
     if (areCollinear(pointA, pointB, origin)) {
         return new LineEdge(pointA, pointB);
     } else{
@@ -99,6 +103,7 @@ void LineEdge::draw(QPainter *painter) {
 }
 
 void LineEdge::getRegion(QPointF *polygonCenter, QPointF origin, float radius) {}
+
 
 
 ArcEdge::ArcEdge(QPointF pA, QPointF pB, QPointF origin, float diskDiameter) {

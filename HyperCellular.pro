@@ -47,3 +47,4 @@ OBJECTS_DIR += build
 MOC_DIR += build
 
 QMAKE_CXXFLAGS += -lgtest -Wall -Wno-unused-parameter -g -std=c++11
+QMAKE_DISTCLEAN += -r build bin

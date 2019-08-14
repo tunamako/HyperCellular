@@ -18,7 +18,7 @@ class CellularController : public QWidget {
     Q_OBJECT
 
  public:
-    explicit CellularController(QWidget *parent, PoincareViewModel *model);
+    explicit CellularController(QWidget *parent);
     ~CellularController();
 
     void clicked(QMouseEvent *e);

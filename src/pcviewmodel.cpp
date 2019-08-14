@@ -17,6 +17,19 @@
 
 #define PI 3.14159265
 
+PoincareViewModel* PoincareViewModel::m_pInstance = NULL;
+
+PoincareViewModel* PoincareViewModel::getInstance() {
+    return m_pInstance;
+}
+
+PoincareViewModel* PoincareViewModel::getInstance(QWidget *parent) {
+    if (!m_pInstance) {
+        m_pInstance = new PoincareViewModel(parent);
+    }
+    return m_pInstance;
+}
+
 PoincareViewModel::PoincareViewModel(QWidget *parent) :
     QWidget(parent) {
     this->parent = parent;
@@ -28,13 +41,11 @@ PoincareViewModel::PoincareViewModel(QWidget *parent) :
     this->renderDepth = 2;
     this->fillMode = false;
     this->tilesToUpdate = false;
-    this->centerVertices = QVector<QPointF>();
     this->drawnTiles = std::map<float, std::unordered_set<float> >();
 }
-PoincareViewModel::~PoincareViewModel() {}
 
-void PoincareViewModel::genCenterVertices() {
-    centerVertices.clear();
+QVector<QPointF> PoincareViewModel::genCenterVertices() {
+    QVector<QPointF> vertices = QVector<QPointF>();
     int p = sideCount;
     int q = adjacentCount;
     float dist = (diskDiameter/2) * sqrt(cos(M_PI/p + M_PI/q)*cos(M_PI/q) / (sin(2*M_PI/q) * sin(M_PI/p) + cos(M_PI/p + M_PI/q)* cos(M_PI/q)));
@@ -44,22 +55,23 @@ void PoincareViewModel::genCenterVertices() {
     for (int i = 0; i < p; i++) {
         x = origin.x() + (dist) * cos(i * alpha);
         y = origin.y() + (dist) * sin(i * alpha);
-        centerVertices.push_back(QPointF(x, y));
+        vertices.push_back(QPointF(x, y));
     }
+    return vertices;
 }
 
-bool PoincareViewModel::hasBeenDrawn(QPointF &aPoint) {
-    float precision = 1000;
-    float x = round(precision * aPoint.x())/precision;
-    float y = round(precision * aPoint.y())/precision;
+bool PoincareViewModel::hasBeenDrawn(Tile *aTile) {
+    float precision = 100000;
+    float x = round(precision * aTile->center.x())/precision;
+    float y = round(precision * aTile->center.y())/precision;
 
     if (x == y) {}
     return false;
-    // drawnTiles[x][y] = aPoint;
+    // drawnTiles[x][y] = tileCenter;
 }
 
 void PoincareViewModel::addDrawnTile(Tile *aTile) {
-    float precision = 1000;
+    float precision = 100000;
     float x = round(precision * aTile->center.x())/precision;
     float y = round(precision * aTile->center.y())/precision;
     if (x == y) {}
@@ -70,39 +82,11 @@ void PoincareViewModel::drawTiling() {
     drawnCount = 0;
     drawnTiles.clear();
     tiles.clear();
-    QVector<Tile *> queue;
 
-    genCenterVertices();
+    centerTile = new Tile(genCenterVertices(), origin);
+    centerTile->constructTiling(renderDepth);
+    centerTile->draw();
 
-    Tile *centerTile = new Tile(centerVertices, *this, renderDepth, origin);
-    queue.push_back(centerTile);
-
-    while(!queue.empty()) {
-        Tile *curTile = queue.front();
-        queue.pop_front();
-
-        curTile->draw(this->painter);
-        tiles.push_back(curTile);
-
-        if (curTile->layer == 1) {
-            continue;
-        }
-
-        for (auto edge : curTile->edges) {
-            // First reflect the center of the current tile to check if the
-            // reflected tile has been drawn before
-            QPointF reflectedCenter = edge->reflectPoint(curTile->center);
-            QVector<QPointF> reflectedVertices = edge->reflectTile(curTile);
-            Tile *neighbor = new Tile(reflectedVertices, *this, curTile->layer - 1, reflectedCenter);
-
-            queue.push_back(neighbor);
-
-            curTile->neighbors.push_back(neighbor);
-        }
-
-    }
-
-    centerTile->draw(this->painter);
     delete centerTile;
 }
 
