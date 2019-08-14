@@ -8,18 +8,19 @@
 #include <include/pcviewmodel.h>
 
 
-Tile::Tile(QVector<QPointF> vertices, QPointF center) {
+Tile::Tile(QPointF center, QVector<QPointF> vertices) {
+    this->pcviewmodel = PoincareViewModel::getInstance();
+    this->center = center;
     this->edges = std::vector<Edge *>();
     this->neighbors = std::vector<Tile *>();
-    this->center = center;
-    this->layer = layer;
     this->vertices = vertices;
+
     this->color = QColor(0, 0, 0, 255);
     this->nextColor = nullptr;
+    this->fillMode = pcviewmodel->fillMode;
+    this->region = pcviewmodel->diskRegion;
 
-    this->fillMode = PoincareViewModel::getInstance()->fillMode;
-    this->region = PoincareViewModel::getInstance()->diskRegion;
-
+    // TODO: Cleaner way to do this?
     for (int i = 0; i < vertices.size() - 1; ++i) {
         Edge * edge = Edge::create(vertices[i], vertices[i+1]);
         this->edges.push_back(edge);
@@ -29,20 +30,28 @@ Tile::Tile(QVector<QPointF> vertices, QPointF center) {
 }
 
 Tile::~Tile() {
-    for (auto edge : edges) {
+    for (auto edge : edges)
         delete edge;
-    }
-    for (auto tile : neighbors) {
+    for (auto tile : neighbors)
         delete tile;
+}
+
+void Tile::generateNeighbors() {
+    for (auto edge : this->edges) {
+        Tile *reflectedTile = edge->reflectTile(this);
+
+        if (reflectedTile != nullptr)
+            this->neighbors.push_back(reflectedTile);
     }
 }
 
-void Tile::constructTiling(int renderDepth) {
-
+void Tile::constructTiling(int layer) {
+    this->layer = layer;
+    this->generateNeighbors();
 }
 
 void Tile::draw() {
-    QPainter *painter = PoincareViewModel::getInstance()->painter;
+    QPainter *painter = pcviewmodel->painter;
 
     if (fillMode) {
         QPainterPath path = QPainterPath();

@@ -16,6 +16,7 @@
 #include "include/math_helpers.h"
 
 #define PI 3.14159265
+#define PRECISION 10000
 
 PoincareViewModel* PoincareViewModel::m_pInstance = NULL;
 
@@ -60,20 +61,18 @@ QVector<QPointF> PoincareViewModel::genCenterVertices() {
     return vertices;
 }
 
-bool PoincareViewModel::hasBeenDrawn(Tile *aTile) {
-    float precision = 100000;
-    float x = round(precision * aTile->center.x())/precision;
-    float y = round(precision * aTile->center.y())/precision;
+bool PoincareViewModel::tileExists(QPointF tileCenter) {
+    float x = round(PRECISION * tileCenter.x())/PRECISION;
+    float y = round(PRECISION * tileCenter.y())/PRECISION;
 
     if (x == y) {}
     return false;
     // drawnTiles[x][y] = tileCenter;
 }
 
-void PoincareViewModel::addDrawnTile(Tile *aTile) {
-    float precision = 100000;
-    float x = round(precision * aTile->center.x())/precision;
-    float y = round(precision * aTile->center.y())/precision;
+void PoincareViewModel::addTile(Tile *aTile) {
+    float x = round(PRECISION * aTile->center.x())/PRECISION;
+    float y = round(PRECISION * aTile->center.y())/PRECISION;
     if (x == y) {}
     // drawnTiles[x][y] = aTile;
 }
@@ -83,7 +82,7 @@ void PoincareViewModel::drawTiling() {
     drawnTiles.clear();
     tiles.clear();
 
-    centerTile = new Tile(genCenterVertices(), origin);
+    centerTile = new Tile(origin, genCenterVertices());
     centerTile->constructTiling(renderDepth);
     centerTile->draw();
 
@@ -108,6 +107,7 @@ void PoincareViewModel::paintEvent(QPaintEvent *) {
     this->painter->setClipRegion(diskRegion);
 
     if (tilesToUpdate) {
+        // TODO: Update tile colors
     } else {
         drawTiling();
     }

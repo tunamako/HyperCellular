@@ -43,6 +43,9 @@ class PoincareViewModel : public QWidget {
     void toggleFillMode();
     void updateTiles();
 
+    bool tileExists(QPointF tileCenter);
+    void addTile(Tile *aTile);
+
  private:
     explicit PoincareViewModel(QWidget *parent);
 
@@ -57,8 +60,6 @@ class PoincareViewModel : public QWidget {
 
     void drawTiling();
     QVector<QPointF> genCenterVertices();
-    bool hasBeenDrawn(Tile *aTile);
-    void addDrawnTile(Tile *aTile);
     void paintEvent(QPaintEvent *);
     bool areHyperbolicDims(int p, int q);
     // void mousePressEvent();

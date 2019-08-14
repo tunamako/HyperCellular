@@ -47,12 +47,16 @@ Edge *Edge::create(QPointF pointA, QPointF pointB) {
     }
 }
 
-QVector<QPointF> Edge::reflectTile(Tile *aTile) {
-    QVector<QPointF> ret;
-    for (auto v : aTile->vertices) {
-        ret.push_back(this->reflectPoint(v));
-    }
-    return ret;
+Tile *Edge::reflectTile(Tile *aTile) {
+    QPointF reflectedCenter = this->reflectVertex(aTile->center);
+    if (PoincareViewModel::getInstance()->tileExists(reflectedCenter))
+        return nullptr;
+
+    QVector<QPointF> reflectedVertices;
+    for (auto v : aTile->vertices)
+        reflectedVertices.push_back(this->reflectVertex(v));
+
+    return new Tile(reflectedCenter, reflectedVertices);
 }
 
 void Edge::draw(QPainter *) {}
@@ -73,7 +77,7 @@ LineEdge::LineEdge(QPointF pointA, QPointF pointB) {
     }
 }
 
-QPointF LineEdge::reflectPoint(QPointF aPoint) {
+QPointF LineEdge::reflectVertex(QPointF aPoint) {
     float m = slope;
     float b = y_intercept;
     float x = aPoint.x();
@@ -111,7 +115,7 @@ ArcEdge::ArcEdge(QPointF pA, QPointF pB, QPointF origin, float diskDiameter) {
     this->B = QPointF(pB.x(), pB.y());
     this->center = origin;
     this->radius = diskDiameter/2;
-    QPointF pC = this->reflectPoint(pA);
+    QPointF pC = this->reflectVertex(pA);
 
     if (!arePerpendicular(pA, pB, pC)) {
         this->center = getCircleCenter(pA, pB, pC);
@@ -131,7 +135,7 @@ ArcEdge::ArcEdge(QPointF pA, QPointF pB, QPointF origin, float diskDiameter) {
     this->collinear = false;
 }
 
-QPointF ArcEdge::reflectPoint(QPointF aPoint) {
+QPointF ArcEdge::reflectVertex(QPointF aPoint) {
     float x = aPoint.x();
     float y = aPoint.y();
     float x0 = center.x();
@@ -156,4 +160,3 @@ void ArcEdge::draw(QPainter *painter) {
 }
 
 void ArcEdge::getRegion(QPointF *polygonCenter, QPointF origin, float radius) {}
-

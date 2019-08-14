@@ -19,7 +19,7 @@ class PoincareViewModel;
 
 class Tile {
  public:
-    explicit Tile(QVector<QPointF> vertices, QPointF center);
+    explicit Tile(QPointF center, QVector<QPointF> vertices);
     ~Tile();
 
     int layer;
@@ -33,8 +33,10 @@ class Tile {
     void update();
 
  private:
-    bool fillMode;
+    void generateNeighbors();
 
+    bool fillMode;
+    PoincareViewModel *pcviewmodel;
     QColor color;
     QColor nextColor;
     QRegion region;
