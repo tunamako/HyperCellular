@@ -19,7 +19,7 @@ class Edge {
 
     Tile *reflectTile(Tile *aTile);
     virtual QPointF reflectVertex(QPointF) = 0;
-    virtual void draw(QPainter *);
+    virtual void draw();
     virtual void getRegion(QPointF *, QPointF, float);
 };
 
@@ -28,7 +28,7 @@ class LineEdge : public Edge {
     LineEdge(QPointF pointA, QPointF pointB);
 
     virtual QPointF reflectVertex(QPointF aPoint);
-    virtual void draw(QPainter *painter);
+    virtual void draw();
     virtual void getRegion(QPointF *polygonCenter, QPointF origin, float radius);
 
  private:
@@ -43,7 +43,7 @@ class ArcEdge : public Edge {
     ArcEdge(QPointF pointA, QPointF pointB, QPointF origin, float diskDiameter);
 
     virtual QPointF reflectVertex(QPointF aPoint);
-    virtual void draw(QPainter *painter);
+    virtual void draw();
     virtual void getRegion(QPointF *polygonCenter, QPointF origin, float radius);
 
  private:

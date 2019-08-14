@@ -59,7 +59,7 @@ Tile *Edge::reflectTile(Tile *aTile) {
     return new Tile(reflectedCenter, reflectedVertices);
 }
 
-void Edge::draw(QPainter *) {}
+void Edge::draw() {}
 void Edge::getRegion(QPointF *, QPointF, float) {}
 
 
@@ -89,7 +89,7 @@ QPointF LineEdge::reflectVertex(QPointF aPoint) {
         // axis of reflection is vertical
         invX = x - 2 * (x - A.x());
         invY = y;
-    } else if (fabs(m) < 0.000000001) {
+    } else if (fabs(m) < 0.0000001) {
         // axis of reflection is horizontal
         invX = x;
         invY = y - 2 * (y - A.y());
@@ -102,8 +102,8 @@ QPointF LineEdge::reflectVertex(QPointF aPoint) {
     return QPointF(invX, invY);
 }
 
-void LineEdge::draw(QPainter *painter) {
-    painter->drawLine(A, B);
+void LineEdge::draw() {
+    PoincareViewModel::getInstance()->painter->drawLine(A, B);
 }
 
 void LineEdge::getRegion(QPointF *polygonCenter, QPointF origin, float radius) {}
@@ -146,8 +146,9 @@ QPointF ArcEdge::reflectVertex(QPointF aPoint) {
     return QPointF(invX, invY);
 }
 
-void ArcEdge::draw(QPainter *painter) {
+void ArcEdge::draw() {
     // rectangle inscribed by aCircle
+    QPainter *painter = PoincareViewModel::getInstance()->painter;
     QRectF rect(center.x() - radius, center.y() - radius, radius * 2, radius * 2);
     QLineF lineA(center, A);
     QLineF lineB(center, B);

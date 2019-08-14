@@ -46,8 +46,14 @@ void Tile::generateNeighbors() {
 }
 
 void Tile::constructTiling(int layer) {
+    if (layer == 1)
+        return;
+
     this->layer = layer;
     this->generateNeighbors();
+
+    for (auto tile : neighbors)
+        tile->constructTiling(layer - 1);
 }
 
 void Tile::draw() {
@@ -59,9 +65,11 @@ void Tile::draw() {
         painter->fillPath(path, QBrush(this->color));
     }
 
-    for (auto v : edges) {
-        v->draw(painter);
-    }
+    for (auto v : edges)
+        v->draw();
+
+    for (auto tile : neighbors)
+        tile->draw();
 }
 
 void Tile::update() {
